@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+server/src/services/stt/vosk/model/
+server/src/services/tts/piper/voices/
+test_audio.pcm
