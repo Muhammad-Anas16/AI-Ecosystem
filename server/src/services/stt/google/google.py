@@ -7,12 +7,12 @@ import speech_recognition as sr
 
 recognizer = sr.Recognizer()
 
-SILENCE_THRESHOLD = 300           # is RMS se neeche "khaamoshi" maana jata hai
-SILENCE_CHUNKS_TO_FINALIZE = 12   # itni der khaamoshi ke baad utterance khatam maano
+SILENCE_THRESHOLD = 300
+SILENCE_CHUNKS_TO_FINALIZE = 12
 
 
 def _rms(pcm_bytes: bytes) -> float:
-    samples = array.array('h', pcm_bytes)  # 16-bit signed samples
+    samples = array.array('h', pcm_bytes)
     if len(samples) == 0:
         return 0.0
     return math.sqrt(sum(s * s for s in samples) / len(samples))
@@ -41,13 +41,6 @@ def transcribe_pcm(pcm_bytes: bytes, sample_rate: int = 16000) -> str:
 
 
 class GoogleStreamSession:
-    """
-    Har WebSocket connection ka apna session — Vosk ki tarah built-in streaming
-    Google ke free API mein nahi hoti, isliye humne khud chhota sa silence-detector
-    (VAD) banaya hai: jab tak bol rahe ho buffer collect hota hai, pause hote hi
-    Google ko bhej kar text nikalta hai. Yehi is provider ka "real-time" hai.
-    """
-
     def __init__(self, sample_rate: int = 16000):
         self.sample_rate = sample_rate
         self.buffer = bytearray()
